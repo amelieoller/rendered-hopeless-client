@@ -42,6 +42,11 @@ const TitleInput = styled.input`
   padding: 4px 8px;
   outline: none;
   cursor: pointer;
+  width: 100%;
+  background: transparent;
+  color: white;
+  border: 1px solid #2a2a2a;
+  font-size: 1em;
 `;
 
 const Note = ({
@@ -143,7 +148,7 @@ const Note = ({
       )}
 
       {edit ? (
-        <input
+        <TitleInput
           type="text"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
