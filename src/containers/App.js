@@ -12,7 +12,7 @@ const App = () => (
       </Route>
 
       <Route path="/notes">
-        <NotesPage />
+        <NotesPage edit={false} />
       </Route>
 
       <Route path="/">

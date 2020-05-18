@@ -11,7 +11,7 @@ const ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT;
 let socket;
 
 const StyledNotesPage = styled.div`
-  background: #2d2d2d;
+  background: black;
   color: white;
   height: 100vh;
   font-size: 18px;
@@ -56,6 +56,15 @@ const NotesPage = ({ edit }) => {
     // Receive new incoming game and update game state
     socket.on('createGame', (newGame) => {
       setGames((prevGames) => [newGame, ...prevGames]);
+      setSelectedGame(newGame);
+      setShowAddGameForm(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    // Receive deleted gameId and update game state
+    socket.on('deleteGame', (gameId) => {
+      setGames((prevGames) => prevGames.filter((game) => game._id !== gameId));
     });
   }, []);
 
@@ -93,7 +102,6 @@ const NotesPage = ({ edit }) => {
   // --------------GAME CRUD---------------
   // Create a game
   const createGame = (title) => {
-    console.log(title);
     socket.emit('createGame', title);
   };
 
@@ -105,6 +113,7 @@ const NotesPage = ({ edit }) => {
   // Delete a game
   const deleteGame = (gameId) => {
     socket.emit('deleteGame', gameId);
+    setSelectedGame('');
   };
 
   // --------------NOTE CRUD---------------
@@ -132,54 +141,72 @@ const NotesPage = ({ edit }) => {
 
       socket.emit('getNotes', gameId);
     } else {
-      setSelectedGame(null);
+      setSelectedGame('');
       setNotes([]);
     }
   };
 
   return (
     <StyledNotesPage>
-      <GameSelectAndAdd>
-        {games.length !== 0 && <Games games={games} selectGame={selectGame} />}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="8" y1="12" x2="16" y2="12" />
-        </svg>
+      {edit && (
+        <GameSelectAndAdd>
+          {games.length !== 0 && (
+            <Games
+              games={games}
+              selectGame={selectGame}
+              selectedGameId={selectedGame ? selectedGame._id : ''}
+            />
+          )}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            onClick={() => {
+              if (window.confirm('Are you sure?')) {
+                deleteGame(selectedGame._id);
+              }
+            }}
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
 
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          onClick={() => setShowAddGameForm(!showAddGameForm)}
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="16" />
-          <line x1="8" y1="12" x2="16" y2="12" />
-        </svg>
-      </GameSelectAndAdd>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            onClick={() => setShowAddGameForm(!showAddGameForm)}
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+        </GameSelectAndAdd>
+      )}
 
       {showAddGameForm && <NewGame createGame={createGame} />}
 
-      {selectedGame && <NewNote createNote={createNote} />}
+      {selectedGame && edit && <NewNote createNote={createNote} />}
 
       {notes.length !== 0 && (
-        <Notes notes={notes} deleteNote={deleteNote} updateNote={updateNote} />
+        <Notes
+          edit={edit}
+          notes={notes}
+          deleteNote={deleteNote}
+          updateNote={updateNote}
+        />
       )}
     </StyledNotesPage>
   );

@@ -8,11 +8,12 @@ const StyledGames = styled.select`
   padding: 8px;
   outline: none;
   font-size: 1em;
+  cursor: pointer;
 `;
 
-const Games = ({ games, selectGame }) => {
+const Games = ({ games, selectGame, selectedGameId }) => {
   return (
-    <StyledGames onChange={(e) => selectGame(e.target.value)}>
+    <StyledGames onChange={(e) => selectGame(e.target.value)} value={selectedGameId}>
       <option value="">Select A Game</option>
       {games.map((game) => (
         <option key={game._id} value={game._id}>
