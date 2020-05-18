@@ -27,9 +27,17 @@ const GameSelectAndAdd = styled.div`
   }
 `;
 
+const GameTitle = styled.div`
+  padding: 15px 8px 0 8px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 22px;
+`;
+
 const NotesPage = ({ edit }) => {
   const [notes, setNotes] = useState([]);
   const [games, setGames] = useState([]);
+  const [user, setUser] = useState(null);
   const [selectedGame, setSelectedGame] = useState(null);
   const [showAddGameForm, setShowAddGameForm] = useState(false);
 
@@ -44,9 +52,22 @@ const NotesPage = ({ edit }) => {
     };
   }, []);
 
+  // If a selected game is saved for a user, fetch the id and set game, and notes
+  useEffect(() => {
+    if (games.length !== 0 && user) {
+      const savedUserGameId = user.settings.selectedGameId;
+      const selectedGame = games.find((game) => game._id === savedUserGameId);
+
+      if (selectedGame) {
+        setSelectedGame(selectedGame);
+        socket.emit('getNotes', savedUserGameId);
+      }
+    }
+  }, [games, user]);
+
   // --------------GAME EFFECTS---------------
   useEffect(() => {
-    // Fetch all games from the backend
+    // Fetch all games
     socket.on('getGames', (games) => {
       setGames(games);
     });
@@ -99,6 +120,20 @@ const NotesPage = ({ edit }) => {
     });
   }, []);
 
+  // --------------USER EFFECTS---------------
+  useEffect(() => {
+    socket.on('getUser', (users) => {
+      setUser(users[0]);
+    });
+  }, []);
+
+  useEffect(() => {
+    // Receive updated note and update note state
+    socket.on('updateUser', (updatedUser) => {
+      setUser(updatedUser);
+    });
+  }, []);
+
   // --------------GAME CRUD---------------
   // Create a game
   const createGame = (title) => {
@@ -139,6 +174,8 @@ const NotesPage = ({ edit }) => {
 
       setSelectedGame(newlySelectedGame);
 
+      socket.emit('updateUser', { ...user, settings: { selectedGameId: gameId } });
+
       socket.emit('getNotes', gameId);
     } else {
       setSelectedGame('');
@@ -148,6 +185,8 @@ const NotesPage = ({ edit }) => {
 
   return (
     <StyledNotesPage>
+      {/* {!edit && !!selectedGame && <GameTitle>{selectedGame.title}</GameTitle>} */}
+
       {edit && (
         <GameSelectAndAdd>
           {games.length !== 0 && (

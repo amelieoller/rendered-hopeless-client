@@ -14,16 +14,21 @@ import { ReactComponent as Archive } from '../assets/icons/archive.svg';
 const StyledNote = styled.label`
   display: flex;
   align-items: center;
-  margin: 4px 0;
-  font-size: 1.2em;
+  margin: 12px 0;
+  font-size: 1.1em;
+  line-height: 21px;
 
-  > * {
-    margin-right: 4px;
+  & > *:not(:last-child) {
+    margin-right: 2px;
   }
 
   svg {
     width: 24px;
     flex-shrink: 0;
+  }
+
+  .category-icon {
+    margin-right: 6px;
   }
 `;
 
@@ -45,7 +50,7 @@ const TitleInput = styled.input`
   width: 100%;
   background: transparent;
   color: white;
-  border: 1px solid #2a2a2a;
+  border: none;
   font-size: 1em;
 `;
 
@@ -111,7 +116,7 @@ const Note = ({
       {edit ? (
         <PowerUpDropdown updateNote={updateNote} note={note} />
       ) : (
-        <CategoryComponent />
+        <CategoryComponent className="category-icon" />
       )}
 
       {edit && (
