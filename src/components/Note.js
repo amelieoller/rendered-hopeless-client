@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledNotes = styled.label`
+const StyledNote = styled.label`
   display: flex;
   align-items: center;
   margin: 4px 0;
+  font-size: 1.2em;
 
   svg {
     margin-right: 4px;
-    width: 20px;
+    width: 24px;
     cursor: pointer;
+    flex-shrink: 0;
   }
 `;
 
@@ -23,7 +25,7 @@ const DeleteButton = styled.svg`
 
 const Note = ({ note, note: { checked, title, _id }, deleteNote, updateNote }) => {
   return (
-    <StyledNotes checked>
+    <StyledNote checked>
       {/* <DragHandle
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -82,7 +84,7 @@ const Note = ({ note, note: { checked, title, _id }, deleteNote, updateNote }) =
         </svg>
       )}
       {title}
-    </StyledNotes>
+    </StyledNote>
   );
 };
 

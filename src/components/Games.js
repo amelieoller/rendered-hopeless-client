@@ -7,6 +7,7 @@ const StyledGames = styled.select`
   -webkit-appearance: none;
   padding: 8px;
   outline: none;
+  font-size: 1em;
 `;
 
 const Games = ({ games, selectGame }) => {

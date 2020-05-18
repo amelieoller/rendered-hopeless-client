@@ -5,6 +5,7 @@ const StyledForm = styled.form`
   width: 100%;
 
   input {
+    font-size: 1em;
     width: 100%;
     padding: 8px;
     outline: none;
