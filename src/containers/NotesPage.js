@@ -35,7 +35,7 @@ const NotesPage = ({ edit }) => {
 
   // Starting the connection & dissolving it on unmount
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(ENDPOINT, { transports: ['websocket'] });
 
     return () => {
       socket.emit('disconnect');
