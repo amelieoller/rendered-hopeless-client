@@ -3,13 +3,13 @@ import styled, { keyframes } from "styled-components";
 
 const neon = keyframes`
   from {
-      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #ff1177, 0 0 70px #ff1177,
-        0 0 80px #ff1177, 0 0 100px #ff1177;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff1177, 0 0 35px #ff1177,
+        0 0 80px #ff1177, 0 0 3px #ff1177;
 		}
 		
     to {
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff1177, 0 0 35px #ff1177,
-        0 0 40px #ff1177, 0 0 50px #ff1177;
+      text-shadow: 0 0 0px #fff, 0 0 5px #fff, 0 0 10px #ff1177, 0 0 15px #ff1177,
+        0 0 20px #ff1177, 0 0 25px #ff1177;
     }
 `;
 
@@ -21,7 +21,7 @@ const StyledHome = styled.div`
   justify-content: center;
   height: 100vh;
   font-size: 20px;
-  font-weight: 100;
+  font-weight: 300;
   background: repeating-linear-gradient(
       45deg,
       #2e2048 0%,
@@ -44,8 +44,8 @@ const StyledHome = styled.div`
 
     a {
       color: #fff;
-      font-family: 'Monoton';
-      /* animation: ${neon} 3s ease-in-out infinite alternate; */
+      font-family: "Monoton";
+      animation: ${neon} 3s ease-in-out infinite alternate;
 
       text-decoration: none;
       transition: all 0.5s;
@@ -88,7 +88,7 @@ const StyledHome = styled.div`
       color: #fff;
       /* top: -220px; */
       position: relative;
-      padding: 60px 40px;
+      padding: 50px 40px;
 
       p {
         margin-bottom: 0.8em;
@@ -113,7 +113,7 @@ const StyledHome = styled.div`
   }
 
   /* Media Queries */
-  @media (max-width: 1000px) {
+  @media (max-width: 30px) {
     body {
       font-size: 17px;
     }
@@ -172,9 +172,7 @@ const Home = () => {
           <div className="text">
             <p>
               We're gamers who recapture the past of retro video games,
-              including the
-              <span className="emphasis">fun</span>
-              and the
+              including the <span className="emphasis">fun</span> and the{" "}
               <span className="emphasis">frustration</span>.
             </p>
             <p>
