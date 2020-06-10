@@ -1,5 +1,5 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React from "react";
+import styled, { keyframes } from "styled-components";
 
 const neon = keyframes`
   from {
@@ -171,18 +171,19 @@ const Home = () => {
             <rect height="200" width="700" /> */}
           <div className="text">
             <p>
-              We're gamers who recapture the past of retro video games, including the
+              We're gamers who recapture the past of retro video games,
+              including the
               <span className="emphasis">fun</span>
               and the
               <span className="emphasis">frustration</span>.
             </p>
             <p>
-              Check out our
-              <a href="http://twitch.tv/renderedhopeless/">Twitch stream</a>
-              or our
-              <a href="https://www.youtube.com/renderedhopelessgaming/">
+              Check out our{" "}
+              <a href="http://twitch.tv/renderedhopeless/">Twitch stream</a> or
+              our{" "}
+              <a href="https://www.youtube.com/channel/UC8u6HM2wX_AsQhlKDu-aMAw">
                 YouTube channel
-              </a>
+              </a>{" "}
               for authentic gaming - 8-bit, 16-bit, and beyond.
             </p>
           </div>
