@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
+import styled from "styled-components";
 
-import Notes from '../components/Notes';
-import NewNote from '../components/NewNote';
-import NewGame from '../components/NewGame';
-import Games from '../components/Games';
+import Notes from "../components/Notes";
+import NewNote from "../components/NewNote";
+import NewGame from "../components/NewGame";
+import Games from "../components/Games";
 
 const ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT;
 let socket;
@@ -27,13 +27,6 @@ const GameSelectAndAdd = styled.div`
   }
 `;
 
-const GameTitle = styled.div`
-  padding: 15px 8px 0 8px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 22px;
-`;
-
 const NotesPage = ({ edit }) => {
   const [notes, setNotes] = useState([]);
   const [games, setGames] = useState([]);
@@ -43,10 +36,10 @@ const NotesPage = ({ edit }) => {
 
   // Starting the connection & dissolving it on unmount
   useEffect(() => {
-    socket = io(ENDPOINT, { transports: ['websocket'] });
+    socket = io(ENDPOINT, { transports: ["websocket"] });
 
     return () => {
-      socket.emit('disconnect');
+      socket.emit("disconnect");
 
       socket.off();
     };
@@ -60,7 +53,7 @@ const NotesPage = ({ edit }) => {
 
       if (selectedGame) {
         setSelectedGame(selectedGame);
-        socket.emit('getNotes', savedUserGameId);
+        socket.emit("getNotes", savedUserGameId);
       }
     }
   }, [games, user]);
@@ -68,14 +61,14 @@ const NotesPage = ({ edit }) => {
   // --------------GAME EFFECTS---------------
   useEffect(() => {
     // Fetch all games
-    socket.on('getGames', (games) => {
+    socket.on("getGames", (games) => {
       setGames(games);
     });
   }, []);
 
   useEffect(() => {
     // Receive new incoming game and update game state
-    socket.on('createGame', (newGame) => {
+    socket.on("createGame", (newGame) => {
       setGames((prevGames) => [newGame, ...prevGames]);
       setSelectedGame(newGame);
       setShowAddGameForm(false);
@@ -84,7 +77,7 @@ const NotesPage = ({ edit }) => {
 
   useEffect(() => {
     // Receive deleted gameId and update game state
-    socket.on('deleteGame', (gameId) => {
+    socket.on("deleteGame", (gameId) => {
       setGames((prevGames) => prevGames.filter((game) => game._id !== gameId));
     });
   }, []);
@@ -92,44 +85,46 @@ const NotesPage = ({ edit }) => {
   // --------------NOTE EFFECTS---------------
   useEffect(() => {
     // Fetch all notes for the selected game
-    socket.on('getNotes', (notes) => {
+    socket.on("getNotes", (notes) => {
       setNotes(notes);
     });
   }, []);
 
   useEffect(() => {
     // Receive new incoming note and update note state
-    socket.on('createNote', (newNote) => {
+    socket.on("createNote", (newNote) => {
       setNotes((prevNotes) => [newNote, ...prevNotes]);
     });
   }, []);
 
   useEffect(() => {
     // Receive deleted noteId and update note state
-    socket.on('deleteNote', (noteId) => {
+    socket.on("deleteNote", (noteId) => {
       setNotes((prevNotes) => prevNotes.filter((note) => note._id !== noteId));
     });
   }, []);
 
   useEffect(() => {
     // Receive updated note and update note state
-    socket.on('updateNote', (updatedNote) => {
+    socket.on("updateNote", (updatedNote) => {
       setNotes((prevNotes) =>
-        prevNotes.map((note) => (note._id === updatedNote._id ? updatedNote : note))
+        prevNotes.map((note) =>
+          note._id === updatedNote._id ? updatedNote : note
+        )
       );
     });
   }, []);
 
   // --------------USER EFFECTS---------------
   useEffect(() => {
-    socket.on('getUser', (users) => {
+    socket.on("getUser", (users) => {
       setUser(users[0]);
     });
   }, []);
 
   useEffect(() => {
     // Receive updated note and update note state
-    socket.on('updateUser', (updatedUser) => {
+    socket.on("updateUser", (updatedUser) => {
       setUser(updatedUser);
     });
   }, []);
@@ -137,34 +132,29 @@ const NotesPage = ({ edit }) => {
   // --------------GAME CRUD---------------
   // Create a game
   const createGame = (title) => {
-    socket.emit('createGame', title);
-  };
-
-  // Update a game
-  const updateGame = (updatedGame) => {
-    socket.emit('updateGame', updatedGame);
+    socket.emit("createGame", title);
   };
 
   // Delete a game
   const deleteGame = (gameId) => {
-    socket.emit('deleteGame', gameId);
-    setSelectedGame('');
+    socket.emit("deleteGame", gameId);
+    setSelectedGame("");
   };
 
   // --------------NOTE CRUD---------------
   // Create a note
   const createNote = (title) => {
-    socket.emit('createNote', title, selectedGame._id);
+    socket.emit("createNote", title, selectedGame._id);
   };
 
   // Update a note
   const updateNote = (updatedNote) => {
-    socket.emit('updateNote', updatedNote);
+    socket.emit("updateNote", updatedNote);
   };
 
   // Delete a note
   const deleteNote = (noteId) => {
-    socket.emit('deleteNote', noteId);
+    socket.emit("deleteNote", noteId);
   };
 
   // Select game in dropdown
@@ -174,11 +164,14 @@ const NotesPage = ({ edit }) => {
 
       setSelectedGame(newlySelectedGame);
 
-      socket.emit('updateUser', { ...user, settings: { selectedGameId: gameId } });
+      socket.emit("updateUser", {
+        ...user,
+        settings: { selectedGameId: gameId },
+      });
 
-      socket.emit('getNotes', gameId);
+      socket.emit("getNotes", gameId);
     } else {
-      setSelectedGame('');
+      setSelectedGame("");
       setNotes([]);
     }
   };
@@ -193,7 +186,7 @@ const NotesPage = ({ edit }) => {
             <Games
               games={games}
               selectGame={selectGame}
-              selectedGameId={selectedGame ? selectedGame._id : ''}
+              selectedGameId={selectedGame ? selectedGame._id : ""}
             />
           )}
           <svg
@@ -207,7 +200,7 @@ const NotesPage = ({ edit }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             onClick={() => {
-              if (window.confirm('Are you sure?')) {
+              if (window.confirm("Are you sure?")) {
                 deleteGame(selectedGame._id);
               }
             }}
