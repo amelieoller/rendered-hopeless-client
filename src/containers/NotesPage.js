@@ -6,6 +6,7 @@ import Notes from "../components/Notes";
 import NewNote from "../components/NewNote";
 import NewGame from "../components/NewGame";
 import Games from "../components/Games";
+import Loading from "../components/Loading";
 
 const ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT;
 let socket;
@@ -28,7 +29,7 @@ const GameSelectAndAdd = styled.div`
 `;
 
 const NotesPage = ({ edit }) => {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null);
   const [games, setGames] = useState([]);
   const [user, setUser] = useState(null);
   const [selectedGame, setSelectedGame] = useState(null);
@@ -232,13 +233,15 @@ const NotesPage = ({ edit }) => {
 
       {selectedGame && edit && <NewNote createNote={createNote} />}
 
-      {notes.length !== 0 && (
+      {notes ? (
         <Notes
           edit={edit}
           notes={notes}
           deleteNote={deleteNote}
           updateNote={updateNote}
         />
+      ) : (
+        <Loading />
       )}
     </StyledNotesPage>
   );
